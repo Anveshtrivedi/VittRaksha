@@ -7,6 +7,10 @@ import * as THREE from "three";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Play, Pause, Mail, ArrowRight, Menu, ChevronDown, Sun, Moon } from 'lucide-react';
+import { useAuth } from "@/components/auth-context";
+import { AuthModal } from "@/components/auth-modal";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface DotGlobeHeroProps {
   rotationSpeed?: number;
@@ -94,6 +98,9 @@ const HeroSection = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -105,6 +112,15 @@ const HeroSection = () => {
 
   const toggleDropdown = (dropdownName: string) => {
     setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  };
+
+  const handleLoginClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      router.push("/dashboard");
+    } else {
+      setIsAuthModalOpen(true);
+    }
   };
 
   const ThemeToggleButton = () => {
@@ -127,33 +143,33 @@ const HeroSection = () => {
         <div className="py-2 relative z-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6">
             <a href="#" className="font-bold text-2xl pb-1 text-foreground cursor-pointer flex-shrink-0">
-              Vitt Raksha
+              SecureFin
             </a>
             <nav className="hidden lg:flex text-muted-foreground font-medium">
               <ul className="flex items-center space-x-2">
                 <li><a href="#" className="hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">About</a></li>
                 <li className="relative">
-                  <button onClick={() => toggleDropdown('desktop-resources')} className="flex items-center hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">
+                  {/* <button onClick={() => toggleDropdown('desktop-resources')} className="flex items-center hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">
                     Resources<ChevronDown className={`h-4 w-4 ml-1 transition-transform ${openDropdown === 'desktop-resources' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openDropdown === 'desktop-resources' && (
+                  </button> */}
+                  {/* {openDropdown === 'desktop-resources' && (
                     <ul className="absolute top-full left-0 mt-2 p-2 bg-card border border-border shadow-lg rounded-xl z-20 w-48">
                       <li><a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg">Documentation</a></li>
                       <li><a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg">API Reference</a></li>
                     </ul>
-                  )}
+                  )} */}
                 </li>
-                <li><a href="#" className="hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">Dashboard</a></li>
+                <li><Link href="/dashboard" className="hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">Dashboard</Link></li>
                 <li className="relative">
                   <button onClick={() => toggleDropdown('desktop-pricing')} className="flex items-center hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">
                     RealtimeGuard<ChevronDown className={`h-4 w-4 ml-1 transition-transform ${openDropdown === 'desktop-pricing' ? 'rotate-180' : ''}`} />
                   </button>
-                  {openDropdown === 'desktop-pricing' && (
+                  {/* {openDropdown === 'desktop-pricing' && (
                     <ul className="absolute top-full left-0 mt-2 p-2 bg-card border border-border shadow-lg rounded-xl z-20 w-48">
                       <li><a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg">Enterprise</a></li>
                       <li><a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg">Startups</a></li>
                     </ul>
-                  )}
+                  )} */}
                 </li>
               </ul>
             </nav>
@@ -161,10 +177,12 @@ const HeroSection = () => {
 
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-3">
-              <a href="#" className="text-foreground hover:text-muted-foreground cursor-pointer py-2 px-4 text-sm capitalize font-medium transition-colors rounded-xl">Login</a>
-              <button className="bg-foreground hover:bg-muted-foreground text-background py-2.5 px-5 text-sm rounded-xl capitalize font-medium transition-colors flex items-center gap-2">
-                Get Started<ArrowRight className="h-4 w-4" />
+              <button onClick={handleLoginClick} className="text-foreground hover:text-muted-foreground cursor-pointer py-2 px-4 text-sm capitalize font-medium transition-colors rounded-xl">
+                {isLoggedIn ? "Dashboard" : "Login"}
               </button>
+              {/* <button className="bg-foreground hover:bg-muted-foreground text-background py-2.5 px-5 text-sm rounded-xl capitalize font-medium transition-colors flex items-center gap-2">
+                Get Started<ArrowRight className="h-4 w-4" />
+              </button> */}
             </div>
             <ThemeToggleButton />
             <div className="lg:hidden relative">
@@ -175,7 +193,9 @@ const HeroSection = () => {
                 <ul className="absolute top-full right-0 mt-2 p-2 shadow-lg bg-card border border-border rounded-xl w-56 z-30">
                   <li><a href="#" className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg">About</a></li>
                   <li className="border-t border-border mt-2 pt-2 space-y-2">
-                    <a href="#" className="block w-full text-center px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg">Login</a>
+                    <button onClick={handleLoginClick} className="block w-full text-center px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg">
+                      {isLoggedIn ? "Dashboard" : "Login"}
+                    </button>
                     <button className="w-full bg-foreground text-background hover:bg-muted-foreground px-3 py-2.5 text-sm rounded-lg flex items-center justify-center gap-2 font-medium">
                       Get Started<ArrowRight className="h-4 w-4" />
                     </button>
@@ -207,6 +227,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </DotGlobeHero>
   );
 };

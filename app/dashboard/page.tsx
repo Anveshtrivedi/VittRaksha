@@ -1,0 +1,203 @@
+"use client"
+
+import { useAuth } from "@/components/auth-context"
+import { Button } from "@/components/ui/button"
+import { Shield, LogOut, TrendingUp, AlertCircle, Wallet, Radar as RadarIcon } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, XAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts"
+import {
+    ChartConfig,
+    Chart,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
+
+const chartData = [
+    { month: "January", Expenditure: 1860 },
+    { month: "February", Expenditure: 3050 },
+    { month: "March", Expenditure: 2370 },
+    { month: "April", Expenditure: 730 },
+    { month: "May", Expenditure: 2090 },
+    { month: "June", Expenditure: 2140 },
+]
+
+const chartConfig = {
+    Expenditure: {
+        label: "Expenditure",
+        color: "#005A30",
+    },
+} satisfies ChartConfig
+
+const categoryData = [
+    { category: "Rent", amount: 1200 },
+    { category: "Food", amount: 950 },
+    { category: "Transport", amount: 1050 },
+    { category: "Utilities", amount: 700 },
+    { category: "Entertainment", amount: 650 },
+    { category: "Savings", amount: 300 },
+]
+
+const categoryConfig = {
+    amount: { label: "Amount", color: "#03224C" },
+} satisfies ChartConfig
+
+export default function DashboardPage() {
+    const { logout } = useAuth()
+
+    return (
+        <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <header className="border-b border-border bg-card/50 backdrop-blur-xl sticky top-0 z-50">
+                <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+                    <div className="flex items-center gap-2">
+                        <Shield className="h-6 w-6 text-cyan-500" />
+                        <span className="font-bold text-lg tracking-tight">SecureFin Dashboard</span>
+                    </div>
+                    <Button variant="ghost" onClick={logout} className="gap-2 hover:bg-red-500/10 hover:text-red-500 transition-colors">
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                    </Button>
+                </div>
+            </header>
+
+            <main className="flex-1 container px-4 md:px-6 py-8 space-y-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight">Financial Overview</h1>
+                        <p className="text-muted-foreground mt-1">Track your expenses and manage your budget effectively.</p>
+                    </div>
+                    <div className="flex items-center gap-2 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
+                        <Wallet className="h-5 w-5 text-cyan-500" />
+                        <span className="text-sm font-medium text-muted-foreground">Total Balance:</span>
+                        <span className="text-lg font-bold">₹12,450.00</span>
+                    </div>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+                    {/* Expense Trend Chart */}
+                    <div className="col-span-4 bg-card border border-border rounded-2xl p-11 shadow-sm">
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 className="font-semibold text-lg flex items-center gap-2">
+                                    <TrendingUp className="h-5 w-5 text-cyan-500" />
+                                    Monthly Expense Trend
+                                </h3>
+                                <p className="text-sm">Tracking monthly expenditure</p>
+                            </div>
+                        </div>
+                        <Chart config={chartConfig} className="h-[300px] w-full">
+                            <BarChart accessibilityLayer data={chartData}>
+                                <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
+                                <XAxis
+                                    dataKey="month"
+                                    tickLine={false}
+                                    tickMargin={10}
+                                    axisLine={false}
+                                    tickFormatter={(value) => value.slice(0, 3)}
+                                    stroke="hsl(var(--muted-foreground))"
+                                />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <ChartLegend content={<ChartLegendContent />} />
+                                <Bar dataKey="Expenditure" fill="var(--color-Expenditure)" radius={4} />
+                            </BarChart>
+                        </Chart>
+                    </div>
+
+                    {/* Expense Categorization Chart (Radar) */}
+                    <div className="col-span-4 lg:col-span-3 bg-card border border-border rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 className="font-semibold text-lg flex items-center gap-2">
+                                    <RadarIcon className="h-5 w-5 text-cyan-500" />
+                                    Expense Breakdown
+                                </h3>
+                                <p className="text-sm text-muted-foreground">Distribution by category</p>
+                            </div>
+                        </div>
+                        <Chart config={categoryConfig} className="h-[300px] w-full mx-auto aspect-square max-h-[300px]">
+                            <RadarChart data={categoryData}>
+                                <ChartTooltip
+                                    cursor={false}
+                                    content={<ChartTooltipContent />}
+                                />
+                                <PolarGrid className="fill-[--color-desktop] opacity-20" />
+                                <PolarAngleAxis dataKey="category" />
+                                <Radar
+                                    dataKey="amount"
+                                    fill="var(--color-amount)"
+                                    fillOpacity={0.5}
+                                    stroke="var(--color-amount)"
+                                    strokeWidth={2}
+                                />
+                            </RadarChart>
+                        </Chart>
+                    </div>
+
+                    {/* Side Widgets */}
+                    <div className="col-span-4 lg:col-span-7 grid md:grid-cols-2 gap-6">
+                        {/* Important Expenses */}
+                        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+                            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                                <AlertCircle className="h-5 w-5 text-orange-500" />
+                                Important Expenses
+                            </h3>
+                            <div className="space-y-4">
+                                {[
+                                    { name: "Rent", amount: "₹5,200", due: "1st of month", paid: false },
+                                    { name: "EMI - Laptop", amount: "₹3500", due: "5th of month", paid: true },
+                                    { name: "Utilities", amount: "750", due: "10th of month", paid: false },
+                                    { name: "Internet", amount: "₹570", due: "15th of month", paid: true },
+                                ].map((expense, i) => (
+                                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50 hover:border-border transition-colors">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-2 h-2 rounded-full ₹{expense.paid ? "bg-green-500" : "bg-orange-500"}`} />
+                                            <div>
+                                                <p className="font-medium text-sm">{expense.name}</p>
+                                                <p className="text-xs text-muted-foreground">Due: {expense.due}</p>
+                                            </div>
+                                        </div>
+                                        <span className="font-bold text-sm">{expense.amount}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Budget Constraints */}
+                        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+                            <h3 className="font-semibold text-lg mb-4">Budget Constraints</h3>
+                            <div className="space-y-6">
+                                <div>
+                                    <div className="flex justify-between text-sm mb-2">
+                                        <span className="text-muted-foreground">Monthly Limit</span>
+                                        <span className="font-medium">₹2,500.00</span>
+                                    </div>
+                                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                        <div className="h-full bg-cyan-500 w-[65%]" />
+                                    </div>
+                                    <div className="flex justify-between text-xs mt-2 text-muted-foreground">
+                                        <span>Spent: ₹1,625</span>
+                                        <span>Remaining: ₹875</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div className="flex justify-between text-sm mb-2">
+                                        <span className="text-muted-foreground">Savings Goal</span>
+                                        <span className="font-medium">₹1000.00</span>
+                                    </div>
+                                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                        <div className="h-full bg-green-500 w-[40%]" />
+                                    </div>
+                                    <div className="flex justify-between text-xs mt-2 text-muted-foreground">
+                                        <span>Saved: ₹240</span>
+                                        <span>Target: ₹1000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    )
+}
