@@ -642,14 +642,6 @@
     z-index: 50;
   }
 
-  .col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
-  .col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-
   .col-span-4 {
     grid-column: span 4 / span 4;
   }
@@ -2887,7 +2879,7 @@
   --chart-3: #59b842;
   --chart-4: #005549;
   --chart-5: #007378;
-  --sidebar: #e4e4e4;
+  --sidebar: #060606;
   --sidebar-foreground: #f8f8f8;
   --sidebar-primary: #008479;
   --sidebar-primary-foreground: #121212;
@@ -2923,7 +2915,7 @@
     --chart-3: lab(67.2406% -46.0438 49.0522);
     --chart-4: lab(32.9052% -78.3235 -.298798);
     --chart-5: lab(43.4098% -46.2568 -18.8642);
-    --sidebar: lab(90.72% .0000298023 -.0000119209);
+    --sidebar: lab(1.5609% 0 0);
     --sidebar-foreground: lab(97.68% -.0000298023 .0000119209);
     --sidebar-primary: lab(50.1983% -72.2205 -6.79286);
     --sidebar-primary-foreground: lab(5.26802% 0 0);
