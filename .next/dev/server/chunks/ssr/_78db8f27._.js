@@ -244,6 +244,10 @@ function Navbar() {
             label: "RealtimeGuard"
         },
         {
+            href: "/wallet",
+            label: "Wallet"
+        },
+        {
             href: "/about",
             label: "About"
         }
@@ -261,7 +265,7 @@ function Navbar() {
                             className: "h-6 w-6 text-cyan-500"
                         }, void 0, false, {
                             fileName: "[project]/components/navbar.tsx",
-                            lineNumber: 34,
+                            lineNumber: 38,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -269,13 +273,13 @@ function Navbar() {
                             children: pathname === "/about" ? "About" : "Vitt Raksha"
                         }, void 0, false, {
                             fileName: "[project]/components/navbar.tsx",
-                            lineNumber: 35,
+                            lineNumber: 39,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/navbar.tsx",
-                    lineNumber: 33,
+                    lineNumber: 37,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -286,23 +290,23 @@ function Navbar() {
                             children: route.label
                         }, route.href, false, {
                             fileName: "[project]/components/navbar.tsx",
-                            lineNumber: 43,
+                            lineNumber: 47,
                             columnNumber: 29
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/navbar.tsx",
-                    lineNumber: 39,
+                    lineNumber: 43,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/navbar.tsx",
-            lineNumber: 32,
+            lineNumber: 36,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/navbar.tsx",
-        lineNumber: 31,
+        lineNumber: 35,
         columnNumber: 9
     }, this);
 }

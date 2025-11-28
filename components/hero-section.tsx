@@ -2,11 +2,10 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
-import { Play, Pause, Mail, ArrowRight, Menu, Sun, Moon } from 'lucide-react';
+import { ArrowRight, Menu } from 'lucide-react';
 import { useAuth } from "@/components/auth-context";
 import { AuthModal } from "@/components/auth-modal";
 import { useRouter } from "next/navigation";
@@ -93,26 +92,11 @@ DotGlobeHero.displayName = "DotGlobeHero";
 
 // Integrated Hero Section Component
 const HeroSection = () => {
-  const [email, setEmail] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const { isLoggedIn, role, logout } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleEmailSubmit = () => {
-    console.log('Email submitted:', email);
-  };
-
-  const toggleDropdown = (dropdownName: string) => {
-    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
-  };
 
   const handleLoginClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -123,18 +107,6 @@ const HeroSection = () => {
     }
   };
 
-  const ThemeToggleButton = () => {
-    if (!mounted) return <div className="w-10 h-10" />;
-    // return (
-    //   <button
-    //     onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    //     className="bg-muted hover:bg-border flex-shrink-0 p-2.5 rounded-full transition-colors"
-    //     aria-label="Toggle theme"
-    //   >
-    //     {theme === "light" ? <Moon className="h-5 w-5 text-foreground" /> : <Sun className="h-5 w-5 text-foreground" />}
-    //   </button>
-    // );
-  };
 
   return (
     <DotGlobeHero>
@@ -157,6 +129,7 @@ const HeroSection = () => {
                     {role === 'admin' && (
                       <li><Link href="/realtime-guard" className="hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">RealtimeGuard</Link></li>
                     )}
+                    <li><Link href="/wallet" className="hover:text-foreground px-3 py-2 text-sm transition-colors rounded-lg">Wallet</Link></li>
                   </>
                 )}
                 <li className="relative">
@@ -183,7 +156,6 @@ const HeroSection = () => {
                 Get Started<ArrowRight className="h-4 w-4" />
               </button> */}
             </div>
-            <ThemeToggleButton />
             <div className="lg:hidden relative">
               <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="bg-transparent hover:bg-muted border-none p-2 rounded-xl transition-colors">
                 <Menu className="h-6 w-6" />
@@ -200,6 +172,7 @@ const HeroSection = () => {
                       {role === 'admin' && (
                         <li><Link href="/realtime-guard" className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg">RealtimeGuard</Link></li>
                       )}
+                      <li><Link href="/wallet" className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg">Wallet</Link></li>
                     </>
                   )}
                   <li className="border-t border-border mt-2 pt-2 space-y-2">

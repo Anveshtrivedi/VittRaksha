@@ -22,6 +22,10 @@ export function Navbar() {
             label: "RealtimeGuard",
         },
         {
+            href: "/wallet",
+            label: "Wallet",
+        },
+        {
             href: "/about",
             label: "About",
         },

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default function RealtimeGuardPage() {
-    const { role, user } = useAuth()
+    const { role } = useAuth()
     const router = useRouter()
 
     useEffect(() => {

@@ -16,6 +16,7 @@ export function AddExpenseModal({ isOpen, onClose, onAddExpense }: AddExpenseMod
     const [category, setCategory] = React.useState("Food")
     const [date, setDate] = React.useState("")
     const [isCustomCategory, setIsCustomCategory] = React.useState(false)
+    const [isImportant, setIsImportant] = React.useState(false)
 
     if (!isOpen) return null
 
@@ -26,6 +27,7 @@ export function AddExpenseModal({ isOpen, onClose, onAddExpense }: AddExpenseMod
             amount,
             category,
             date,
+            important: isImportant,
             id: Date.now().toString()
         }
         onAddExpense(newExpense)
@@ -36,6 +38,7 @@ export function AddExpenseModal({ isOpen, onClose, onAddExpense }: AddExpenseMod
         setCategory("Food")
         setDate("")
         setIsCustomCategory(false)
+        setIsImportant(false)
     }
 
     return (
@@ -145,6 +148,19 @@ export function AddExpenseModal({ isOpen, onClose, onAddExpense }: AddExpenseMod
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="important"
+                                checked={isImportant}
+                                onChange={(e) => setIsImportant(e.target.checked)}
+                                className="w-4 h-4 rounded border-slate-700 bg-slate-900 text-cyan-500 focus:ring-cyan-500/50"
+                            />
+                            <label htmlFor="important" className="text-sm text-slate-400 cursor-pointer select-none">
+                                Mark as Important Expense
+                            </label>
                         </div>
 
                         <Button

@@ -2,11 +2,11 @@
 
 import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
-import { Shield, LogOut, TrendingUp, AlertCircle, Wallet, Radar as RadarIcon, Home, Plus } from "lucide-react"
+import { Shield, LogOut, TrendingUp, AlertCircle, Wallet, Radar as RadarIcon, Home, Plus, Trash2 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import React, { useState } from "react"
 import { AddExpenseModal } from "@/components/add-expense-modal"
-import { Bar, BarChart, CartesianGrid, XAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis } from "recharts"
 import {
     ChartConfig,
     Chart,
@@ -16,14 +16,6 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const chartData = [
-    { month: "January", Expenditure: 1860 },
-    { month: "February", Expenditure: 3050 },
-    { month: "March", Expenditure: 2370 },
-    { month: "April", Expenditure: 730 },
-    { month: "May", Expenditure: 2090 },
-    { month: "June", Expenditure: 2140 },
-]
 
 const chartConfig = {
     Expenditure: {
@@ -31,15 +23,6 @@ const chartConfig = {
         color: "#005A30",
     },
 } satisfies ChartConfig
-
-const categoryData = [
-    { category: "Rent", amount: 1200 },
-    { category: "Food", amount: 950 },
-    { category: "Transport", amount: 1050 },
-    { category: "Utilities", amount: 700 },
-    { category: "Entertainment", amount: 650 },
-    { category: "Savings", amount: 300 },
-]
 
 const categoryConfig = {
     amount: { label: "Amount", color: "#03224C" },
@@ -49,11 +32,12 @@ export default function DashboardPage() {
     const { logout, role } = useAuth()
     const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false)
     const [expenses, setExpenses] = useState([
-        { name: "Rent", amount: "5200", due: "1st of month", paid: false, category: "Rent" },
-        { name: "EMI - Laptop", amount: "3500", due: "5th of month", paid: true, category: "Shopping" },
-        { name: "Utilities", amount: "750", due: "10th of month", paid: false, category: "Utilities" },
-        { name: "Internet", amount: "570", due: "15th of month", paid: true, category: "Utilities" },
+        { id: "1", name: "Rent", amount: "5200", due: "1st of month", paid: false, category: "Rent", date: "2024-05-01", important: true },
+        { id: "2", name: "EMI - Laptop", amount: "3500", due: "5th of month", paid: true, category: "Shopping", date: "2024-05-05", important: true },
+        { id: "3", name: "Utilities", amount: "750", due: "10th of month", paid: false, category: "Utilities", date: "2024-05-10", important: false },
+        { id: "4", name: "Internet", amount: "570", due: "15th of month", paid: true, category: "Utilities", date: "2024-05-15", important: true },
     ])
+    const [selectedMonth, setSelectedMonth] = useState<string>(new Date().toLocaleString('default', { month: 'long', year: 'numeric' }))
 
     const handleAddExpense = (newExpense: any) => {
         setExpenses(prev => [{
@@ -62,6 +46,67 @@ export default function DashboardPage() {
             paid: false
         }, ...prev])
     }
+
+    const handleDeleteExpense = (id: string) => {
+        setExpenses(prev => prev.filter(expense => expense.id !== id))
+    }
+
+    // Group expenses by month
+    const expensesByMonth = React.useMemo(() => {
+        const grouped: { [key: string]: { title: string, expenses: typeof expenses, sortKey: number } } = {}
+
+        expenses.forEach(expense => {
+            const date = expense.date ? new Date(expense.date) : new Date()
+            const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' })
+
+            if (!grouped[monthYear]) {
+                grouped[monthYear] = {
+                    title: monthYear,
+                    expenses: [],
+                    sortKey: date.getTime() // Use timestamp for sorting
+                }
+            }
+            grouped[monthYear].expenses.push(expense)
+        })
+
+        return Object.values(grouped).sort((a, b) => a.sortKey - b.sortKey)
+    }, [expenses])
+
+    // Derive Chart Data
+    const chartData = React.useMemo(() => {
+        return expensesByMonth.map(group => ({
+            month: group.title,
+            Expenditure: group.expenses.reduce((acc, curr) => acc + parseFloat(curr.amount), 0)
+        }))
+    }, [expensesByMonth])
+
+    // Derive Category Data
+    const categoryData = React.useMemo(() => {
+        const catData: { [key: string]: number } = {}
+
+        expenses.forEach(expense => {
+            const cat = expense.category || "Others"
+            if (!catData[cat]) catData[cat] = 0
+            catData[cat] += parseFloat(expense.amount)
+        })
+
+        return Object.keys(catData).map(category => ({
+            category,
+            amount: catData[category]
+        }))
+    }, [expenses])
+
+    // Calculate Budget Metrics
+    const budgetMonth = selectedMonth
+    const currentMonthExpenses = expensesByMonth.find(g => g.title === budgetMonth)?.expenses || []
+    const totalSpent = currentMonthExpenses.reduce((acc, curr) => acc + parseFloat(curr.amount), 0)
+
+    const MONTHLY_LIMIT = 10000
+    const SAVINGS_GOAL = 1000
+    const remaining = Math.max(0, MONTHLY_LIMIT - totalSpent)
+    const saved = remaining // Assuming remaining budget is saved
+    const spentPercentage = Math.min(100, (totalSpent / MONTHLY_LIMIT) * 100)
+    const savedPercentage = Math.min(100, (saved / SAVINGS_GOAL) * 100)
 
     if (role === "admin") {
         return (
@@ -196,7 +241,13 @@ export default function DashboardPage() {
                                 />
                                 <ChartTooltip content={<ChartTooltipContent />} />
                                 <ChartLegend content={<ChartLegendContent />} />
-                                <Bar dataKey="Expenditure" fill="var(--color-Expenditure)" radius={4} />
+                                <Bar
+                                    dataKey="Expenditure"
+                                    fill="var(--color-Expenditure)"
+                                    radius={4}
+                                    onClick={(data) => setSelectedMonth(data.month)}
+                                    className="cursor-pointer hover:opacity-80 transition-opacity"
+                                />
                             </BarChart>
                         </Chart>
                     </div>
@@ -240,8 +291,8 @@ export default function DashboardPage() {
                                 Important Expenses
                             </h3>
                             <div className="space-y-4">
-                                {expenses.map((expense, i) => (
-                                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50 hover:border-border transition-colors">
+                                {expenses.filter(e => e.important).map((expense, i) => (
+                                    <div key={expense.id || i} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50 hover:border-border transition-colors group">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-2 h-2 rounded-full ${expense.paid ? "bg-green-500" : "bg-orange-500"}`} />
                                             <div>
@@ -249,7 +300,16 @@ export default function DashboardPage() {
                                                 <p className="text-xs text-muted-foreground">Due: {expense.due}</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-sm">₹{expense.amount}</span>
+                                        <div className="flex items-center gap-3">
+                                            <span className="font-bold text-sm">₹{expense.amount}</span>
+                                            <button
+                                                onClick={() => handleDeleteExpense(expense.id)}
+                                                className="text-slate-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                                                title="Remove Expense"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -257,37 +317,89 @@ export default function DashboardPage() {
 
                         {/* Budget Constraints */}
                         <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-                            <h3 className="font-semibold text-lg mb-4">Budget Constraints</h3>
+                            <h3 className="font-semibold text-lg mb-4">Budget Constraints <span className="text-sm font-normal text-muted-foreground ml-2">({budgetMonth})</span></h3>
                             <div className="space-y-6">
                                 <div>
                                     <div className="flex justify-between text-sm mb-2">
                                         <span className="text-muted-foreground">Monthly Limit</span>
-                                        <span className="font-medium">₹2,500.00</span>
+                                        <span className="font-medium">₹{MONTHLY_LIMIT.toLocaleString()}</span>
                                     </div>
                                     <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                        <div className="h-full bg-cyan-500 w-[65%]" />
+                                        <div
+                                            className={`h-full ${spentPercentage > 90 ? 'bg-red-500' : 'bg-cyan-500'}`}
+                                            style={{ width: `${spentPercentage}%` }}
+                                        />
                                     </div>
                                     <div className="flex justify-between text-xs mt-2 text-muted-foreground">
-                                        <span>Spent: ₹1,625</span>
-                                        <span>Remaining: ₹875</span>
+                                        <span>Spent: ₹{totalSpent.toLocaleString()}</span>
+                                        <span>Remaining: ₹{remaining.toLocaleString()}</span>
                                     </div>
                                 </div>
 
                                 <div>
                                     <div className="flex justify-between text-sm mb-2">
                                         <span className="text-muted-foreground">Savings Goal</span>
-                                        <span className="font-medium">₹1000.00</span>
+                                        <span className="font-medium">₹{SAVINGS_GOAL.toLocaleString()}</span>
                                     </div>
                                     <div className="h-2 bg-muted rounded-full overflow-hidden">
-                                        <div className="h-full bg-green-500 w-[40%]" />
+                                        <div
+                                            className="h-full bg-green-500"
+                                            style={{ width: `${savedPercentage}%` }}
+                                        />
                                     </div>
                                     <div className="flex justify-between text-xs mt-2 text-muted-foreground">
-                                        <span>Saved: ₹240</span>
-                                        <span>Target: ₹1000</span>
+                                        <span>Saved: ₹{saved.toLocaleString()}</span>
+                                        <span>Target: ₹{SAVINGS_GOAL.toLocaleString()}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Monthly Expenses List */}
+                <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                        <Wallet className="h-5 w-5 text-cyan-500" />
+                        Monthly Expenses
+                    </h3>
+                    <div className="space-y-6">
+                        {expensesByMonth.length === 0 ? (
+                            <p className="text-sm text-muted-foreground text-center py-4">No expenses recorded yet.</p>
+                        ) : (
+                            expensesByMonth.map((group) => (
+                                <div key={group.title} className="space-y-3">
+                                    <h4 className="text-sm font-semibold text-slate-400 uppercase tracking-wider pl-1">{group.title}</h4>
+                                    <div className="space-y-3">
+                                        {group.expenses.map((expense, i) => (
+                                            <div key={expense.id || i} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50 hover:border-border transition-colors group">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-2 h-2 rounded-full ${expense.paid ? "bg-green-500" : "bg-orange-500"}`} />
+                                                    <div>
+                                                        <p className="font-medium text-sm">{expense.name}</p>
+                                                        <div className="flex gap-2 text-xs text-muted-foreground">
+                                                            <span>{expense.category}</span>
+                                                            <span>•</span>
+                                                            <span>{expense.date || "No Date"}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="font-bold text-sm">₹{expense.amount}</span>
+                                                    <button
+                                                        onClick={() => handleDeleteExpense(expense.id)}
+                                                        className="text-slate-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                                                        title="Remove Expense"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </main>
