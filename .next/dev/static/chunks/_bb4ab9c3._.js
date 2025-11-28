@@ -114,15 +114,41 @@ function AuthModal({ isOpen, onClose }) {
     const [mode, setMode] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("login");
     const { login } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$auth$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const [email, setEmail] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("");
+    const [phone, setPhone] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("");
     const [password, setPassword] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("");
     const [role, setRole] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("user");
+    const [otpSent, setOtpSent] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"](false);
+    const [otp, setOtp] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("");
+    const [error, setError] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"]("");
     if (!isOpen) return null;
     const handleLogin = (e)=>{
         e.preventDefault();
+        setError("");
+        if (mode === "otp") {
+            if (!otpSent) {
+                // Simulate sending OTP
+                setTimeout(()=>{
+                    setOtpSent(true);
+                }, 500);
+                return;
+            } else {
+                if (otp.length !== 6) {
+                    setError("OTP must be exactly 6 digits");
+                    return;
+                }
+            }
+        }
         // Simulate API call
         setTimeout(()=>{
             login(role);
             onClose();
+            // Reset state after closing
+            setTimeout(()=>{
+                setOtpSent(false);
+                setOtp("");
+                setError("");
+                setMode("login");
+            }, 300);
         }, 500);
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -137,12 +163,12 @@ function AuthModal({ isOpen, onClose }) {
                         className: "h-5 w-5"
                     }, void 0, false, {
                         fileName: "[project]/components/auth-modal.tsx",
-                        lineNumber: 42,
+                        lineNumber: 70,
                         columnNumber: 21
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/auth-modal.tsx",
-                    lineNumber: 38,
+                    lineNumber: 66,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -157,7 +183,7 @@ function AuthModal({ isOpen, onClose }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/auth-modal.tsx",
-                            lineNumber: 47,
+                            lineNumber: 75,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -169,13 +195,13 @@ function AuthModal({ isOpen, onClose }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/auth-modal.tsx",
-                            lineNumber: 52,
+                            lineNumber: 80,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/auth-modal.tsx",
-                    lineNumber: 46,
+                    lineNumber: 74,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -184,6 +210,7 @@ function AuthModal({ isOpen, onClose }) {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                             onSubmit: handleLogin,
                             className: "space-y-4",
+                            autoComplete: "off",
                             children: [
                                 mode === "login" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex p-1 bg-slate-900 rounded-xl mb-6",
@@ -197,14 +224,14 @@ function AuthModal({ isOpen, onClose }) {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 70,
+                                                    lineNumber: 98,
                                                     columnNumber: 37
                                                 }, this),
                                                 "User"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 65,
+                                            lineNumber: 93,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -216,20 +243,20 @@ function AuthModal({ isOpen, onClose }) {
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 78,
+                                                    lineNumber: 106,
                                                     columnNumber: 37
                                                 }, this),
                                                 "Admin"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 73,
+                                            lineNumber: 101,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 64,
+                                    lineNumber: 92,
                                     columnNumber: 29
                                 }, this),
                                 mode !== "otp" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -240,7 +267,7 @@ function AuthModal({ isOpen, onClose }) {
                                             children: "Email"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 86,
+                                            lineNumber: 114,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -250,7 +277,7 @@ function AuthModal({ isOpen, onClose }) {
                                                     className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-grey-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 88,
+                                                    lineNumber: 116,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -258,22 +285,23 @@ function AuthModal({ isOpen, onClose }) {
                                                     value: email,
                                                     onChange: (e)=>setEmail(e.target.value),
                                                     className: "w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
-                                                    placeholder: "name@example.com"
+                                                    placeholder: "name@example.com",
+                                                    autoComplete: "off"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 89,
+                                                    lineNumber: 117,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 87,
+                                            lineNumber: 115,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 113,
                                     columnNumber: 29
                                 }, this),
                                 mode === "login" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -284,7 +312,7 @@ function AuthModal({ isOpen, onClose }) {
                                             children: "Password"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 102,
+                                            lineNumber: 131,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -294,7 +322,7 @@ function AuthModal({ isOpen, onClose }) {
                                                     className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 104,
+                                                    lineNumber: 133,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -302,132 +330,262 @@ function AuthModal({ isOpen, onClose }) {
                                                     value: password,
                                                     onChange: (e)=>setPassword(e.target.value),
                                                     className: "w-full bg-dark-cyan-900 border border-dark-cyan-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
-                                                    placeholder: "••••••••"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 105,
-                                                    columnNumber: 37
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 103,
-                                            columnNumber: 33
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 101,
-                                    columnNumber: 29
-                                }, this),
-                                mode === "signup" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
-                                            children: "Password"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 118,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "relative",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {
-                                                    className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 120,
-                                                    columnNumber: 37
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                    type: "password",
-                                                    className: "w-full bg-slate-900 border border-grey-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
-                                                    placeholder: "Create a password"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 121,
-                                                    columnNumber: 37
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 119,
-                                            columnNumber: 33
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 117,
-                                    columnNumber: 29
-                                }, this),
-                                mode === "otp" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
-                                            children: "One-Time Password"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 132,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "relative",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$smartphone$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Smartphone$3e$__["Smartphone"], {
-                                                    className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
+                                                    placeholder: "••••••••",
+                                                    autoComplete: "new-password"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/auth-modal.tsx",
                                                     lineNumber: 134,
                                                     columnNumber: 37
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                    type: "text",
-                                                    className: "w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all text-center tracking-[0.5em] font-mono text-lg",
-                                                    placeholder: "000000"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/auth-modal.tsx",
-                                                    lineNumber: 135,
-                                                    columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 133,
+                                            lineNumber: 132,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 131,
+                                    lineNumber: 130,
                                     columnNumber: 29
                                 }, this),
+                                mode === "signup" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "space-y-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
+                                                    children: "Phone Number"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/auth-modal.tsx",
+                                                    lineNumber: 149,
+                                                    columnNumber: 37
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "relative",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$smartphone$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Smartphone$3e$__["Smartphone"], {
+                                                            className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/auth-modal.tsx",
+                                                            lineNumber: 151,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                            type: "tel",
+                                                            value: phone,
+                                                            onChange: (e)=>setPhone(e.target.value),
+                                                            className: "w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
+                                                            placeholder: "+91 98765 43210",
+                                                            autoComplete: "off"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/auth-modal.tsx",
+                                                            lineNumber: 152,
+                                                            columnNumber: 41
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/auth-modal.tsx",
+                                                    lineNumber: 150,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/auth-modal.tsx",
+                                            lineNumber: 148,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "space-y-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
+                                                    children: "Password"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/auth-modal.tsx",
+                                                    lineNumber: 163,
+                                                    columnNumber: 37
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "relative",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {
+                                                            className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/auth-modal.tsx",
+                                                            lineNumber: 165,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                            type: "password",
+                                                            className: "w-full bg-slate-900 border border-grey-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
+                                                            placeholder: "Create a password",
+                                                            autoComplete: "new-password"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/auth-modal.tsx",
+                                                            lineNumber: 166,
+                                                            columnNumber: 41
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/auth-modal.tsx",
+                                                    lineNumber: 164,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/auth-modal.tsx",
+                                            lineNumber: 162,
+                                            columnNumber: 33
+                                        }, this)
+                                    ]
+                                }, void 0, true),
+                                mode === "otp" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: !otpSent ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
+                                                children: "Phone Number"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 181,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "relative",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$smartphone$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Smartphone$3e$__["Smartphone"], {
+                                                        className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/auth-modal.tsx",
+                                                        lineNumber: 183,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "tel",
+                                                        value: phone,
+                                                        onChange: (e)=>setPhone(e.target.value),
+                                                        className: "w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all",
+                                                        placeholder: "+91 98765 43210",
+                                                        autoComplete: "off"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/auth-modal.tsx",
+                                                        lineNumber: 184,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 182,
+                                                columnNumber: 41
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/auth-modal.tsx",
+                                        lineNumber: 180,
+                                        columnNumber: 37
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-center",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-sm text-cyan-400",
+                                                    children: [
+                                                        "OTP sent to ",
+                                                        phone
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/auth-modal.tsx",
+                                                    lineNumber: 197,
+                                                    columnNumber: 45
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 196,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "text-xs font-medium text-slate-400 uppercase tracking-wider",
+                                                children: "One-Time Password"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 199,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "relative",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$smartphone$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Smartphone$3e$__["Smartphone"], {
+                                                        className: "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/auth-modal.tsx",
+                                                        lineNumber: 201,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        value: otp,
+                                                        onChange: (e)=>{
+                                                            const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                                            setOtp(value);
+                                                            if (error) setError("");
+                                                        },
+                                                        className: `w-full bg-slate-900 border ${error ? 'border-red-500' : 'border-slate-800'} rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all text-center tracking-[0.5em] font-mono text-lg`,
+                                                        placeholder: "000000",
+                                                        autoComplete: "off"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/auth-modal.tsx",
+                                                        lineNumber: 202,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 200,
+                                                columnNumber: 41
+                                            }, this),
+                                            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-xs text-red-500 mt-1",
+                                                children: error
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/auth-modal.tsx",
+                                                lineNumber: 215,
+                                                columnNumber: 51
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/auth-modal.tsx",
+                                        lineNumber: 195,
+                                        columnNumber: 37
+                                    }, this)
+                                }, void 0, false),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                     type: "submit",
                                     className: "w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-6 rounded-xl transition-all mt-6",
                                     children: [
                                         mode === "login" && "Sign In",
                                         mode === "signup" && "Create Account",
-                                        mode === "otp" && "Verify",
+                                        mode === "otp" && (!otpSent ? "Send OTP" : "Verify"),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowRight$3e$__["ArrowRight"], {
                                             className: "ml-2 h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 151,
+                                            lineNumber: 228,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 221,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/auth-modal.tsx",
-                            lineNumber: 61,
+                            lineNumber: 89,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -441,14 +599,14 @@ function AuthModal({ isOpen, onClose }) {
                                             children: "Create account"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 236,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "w-1 h-1 rounded-full bg-dark-cyan-700"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 237,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -457,7 +615,7 @@ function AuthModal({ isOpen, onClose }) {
                                             children: "Login with OTP"
                                         }, void 0, false, {
                                             fileName: "[project]/components/auth-modal.tsx",
-                                            lineNumber: 161,
+                                            lineNumber: 238,
                                             columnNumber: 33
                                         }, this)
                                     ]
@@ -468,34 +626,34 @@ function AuthModal({ isOpen, onClose }) {
                                     children: "Back to Login"
                                 }, void 0, false, {
                                     fileName: "[project]/components/auth-modal.tsx",
-                                    lineNumber: 165,
+                                    lineNumber: 242,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/auth-modal.tsx",
-                            lineNumber: 156,
+                            lineNumber: 233,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/auth-modal.tsx",
-                    lineNumber: 60,
+                    lineNumber: 88,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/auth-modal.tsx",
-            lineNumber: 36,
+            lineNumber: 64,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/auth-modal.tsx",
-        lineNumber: 35,
+        lineNumber: 63,
         columnNumber: 9
     }, this);
 }
-_s(AuthModal, "nSs91H9Rw5QwcvMbOZx1H5fmDzA=", false, function() {
+_s(AuthModal, "+GDqTK1BlfPN9DXWo7snShhxtO4=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$auth$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];

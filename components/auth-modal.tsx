@@ -17,17 +17,45 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     const [mode, setMode] = React.useState<AuthMode>("login")
     const { login } = useAuth()
     const [email, setEmail] = React.useState("")
+    const [phone, setPhone] = React.useState("")
     const [password, setPassword] = React.useState("")
     const [role, setRole] = React.useState<UserRole>("user")
+    const [otpSent, setOtpSent] = React.useState(false)
+    const [otp, setOtp] = React.useState("")
+    const [error, setError] = React.useState("")
 
     if (!isOpen) return null
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault()
+        setError("")
+
+        if (mode === "otp") {
+            if (!otpSent) {
+                // Simulate sending OTP
+                setTimeout(() => {
+                    setOtpSent(true)
+                }, 500)
+                return
+            } else {
+                if (otp.length !== 6) {
+                    setError("OTP must be exactly 6 digits")
+                    return
+                }
+            }
+        }
+
         // Simulate API call
         setTimeout(() => {
             login(role)
             onClose()
+            // Reset state after closing
+            setTimeout(() => {
+                setOtpSent(false)
+                setOtp("")
+                setError("")
+                setMode("login")
+            }, 300)
         }, 500)
     }
 
@@ -58,7 +86,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                 {/* Form */}
                 <div className="p-8">
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
                         {/* Role Selection */}
                         {mode === "login" && (
                             <div className="flex p-1 bg-slate-900 rounded-xl mb-6">
@@ -92,6 +120,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
                                         placeholder="name@example.com"
+                                        autoComplete="off"
                                     />
                                 </div>
                             </div>
@@ -108,37 +137,85 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="w-full bg-dark-cyan-900 border border-dark-cyan-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
                                         placeholder="••••••••"
+                                        autoComplete="new-password"
                                     />
                                 </div>
                             </div>
                         )}
 
                         {mode === "signup" && (
-                            <div className="space-y-2">
-                                <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">Password</label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                                    <input
-                                        type="password"
-                                        className="w-full bg-slate-900 border border-grey-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
-                                        placeholder="Create a password"
-                                    />
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">Phone Number</label>
+                                    <div className="relative">
+                                        <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                        <input
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
+                                            placeholder="+91 98765 43210"
+                                            autoComplete="off"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">Password</label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                        <input
+                                            type="password"
+                                            className="w-full bg-slate-900 border border-grey-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
+                                            placeholder="Create a password"
+                                            autoComplete="new-password"
+                                        />
+                                    </div>
+                                </div>
+                            </>
                         )}
 
                         {mode === "otp" && (
-                            <div className="space-y-2">
-                                <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">One-Time Password</label>
-                                <div className="relative">
-                                    <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                                    <input
-                                        type="text"
-                                        className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all text-center tracking-[0.5em] font-mono text-lg"
-                                        placeholder="000000"
-                                    />
-                                </div>
-                            </div>
+                            <>
+                                {!otpSent ? (
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">Phone Number</label>
+                                        <div className="relative">
+                                            <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                            <input
+                                                type="tel"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                                className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all"
+                                                placeholder="+91 98765 43210"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-2">
+                                        <div className="mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-center">
+                                            <p className="text-sm text-cyan-400">OTP sent to {phone}</p>
+                                        </div>
+                                        <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">One-Time Password</label>
+                                        <div className="relative">
+                                            <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                            <input
+                                                type="text"
+                                                value={otp}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, '').slice(0, 6)
+                                                    setOtp(value)
+                                                    if (error) setError("")
+                                                }}
+                                                className={`w-full bg-slate-900 border ${error ? 'border-red-500' : 'border-slate-800'} rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all text-center tracking-[0.5em] font-mono text-lg`}
+                                                placeholder="000000"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                        {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <Button
@@ -147,7 +224,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         >
                             {mode === "login" && "Sign In"}
                             {mode === "signup" && "Create Account"}
-                            {mode === "otp" && "Verify"}
+                            {mode === "otp" && (!otpSent ? "Send OTP" : "Verify")}
                             <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </form>
@@ -167,6 +244,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
