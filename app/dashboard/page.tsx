@@ -2,8 +2,10 @@
 
 import { useAuth } from "@/components/auth-context"
 import { Button } from "@/components/ui/button"
-import { Shield, LogOut, TrendingUp, AlertCircle, Wallet, Radar as RadarIcon, Home } from "lucide-react"
+import { Shield, LogOut, TrendingUp, AlertCircle, Wallet, Radar as RadarIcon, Home, Plus } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { AddExpenseModal } from "@/components/add-expense-modal"
 import { Bar, BarChart, CartesianGrid, XAxis, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts"
 import {
     ChartConfig,
@@ -45,6 +47,21 @@ const categoryConfig = {
 
 export default function DashboardPage() {
     const { logout, role } = useAuth()
+    const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false)
+    const [expenses, setExpenses] = useState([
+        { name: "Rent", amount: "5200", due: "1st of month", paid: false, category: "Rent" },
+        { name: "EMI - Laptop", amount: "3500", due: "5th of month", paid: true, category: "Shopping" },
+        { name: "Utilities", amount: "750", due: "10th of month", paid: false, category: "Utilities" },
+        { name: "Internet", amount: "570", due: "15th of month", paid: true, category: "Utilities" },
+    ])
+
+    const handleAddExpense = (newExpense: any) => {
+        setExpenses(prev => [{
+            ...newExpense,
+            due: "Today",
+            paid: false
+        }, ...prev])
+    }
 
     if (role === "admin") {
         return (
@@ -148,6 +165,10 @@ export default function DashboardPage() {
                         <span className="text-sm font-medium text-muted-foreground">Total Balance:</span>
                         <span className="text-lg font-bold">₹12,450.00</span>
                     </div>
+                    <Button onClick={() => setIsAddExpenseOpen(true)} className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add Expense
+                    </Button>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
@@ -219,12 +240,7 @@ export default function DashboardPage() {
                                 Important Expenses
                             </h3>
                             <div className="space-y-4">
-                                {[
-                                    { name: "Rent", amount: "₹5,200", due: "1st of month", paid: false },
-                                    { name: "EMI - Laptop", amount: "₹3500", due: "5th of month", paid: true },
-                                    { name: "Utilities", amount: "750", due: "10th of month", paid: false },
-                                    { name: "Internet", amount: "₹570", due: "15th of month", paid: true },
-                                ].map((expense, i) => (
+                                {expenses.map((expense, i) => (
                                     <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50 hover:border-border transition-colors">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-2 h-2 rounded-full ${expense.paid ? "bg-green-500" : "bg-orange-500"}`} />
@@ -233,7 +249,7 @@ export default function DashboardPage() {
                                                 <p className="text-xs text-muted-foreground">Due: {expense.due}</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-sm">{expense.amount}</span>
+                                        <span className="font-bold text-sm">₹{expense.amount}</span>
                                     </div>
                                 ))}
                             </div>
@@ -275,6 +291,11 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </main>
+            <AddExpenseModal
+                isOpen={isAddExpenseOpen}
+                onClose={() => setIsAddExpenseOpen(false)}
+                onAddExpense={handleAddExpense}
+            />
         </div>
     )
 }
