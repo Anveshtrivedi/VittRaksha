@@ -261,9 +261,8 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-### Built with 💙 by the SecureFin Team
+### Built with ❤️ by the Team Code Odyssey
 
-**[Website](#)** • **[Twitter](#)** • **[Discord](#)**
 
 ⭐ **Star us on GitHub** — it motivates us to keep building!
 
