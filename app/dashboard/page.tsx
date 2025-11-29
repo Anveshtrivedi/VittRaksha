@@ -205,7 +205,7 @@ export default function DashboardPage() {
                         <h1 className="text-3xl font-bold tracking-tight">Financial Overview</h1>
                         <p className="text-muted-foreground mt-1">Track your expenses and manage your budget effectively.</p>
                     </div>
-                    <div className="flex items-center gap-2 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
+                    <div className="flex items-center gap-1 bg-card border border-border px-4 py-2 rounded-xl shadow-sm">
                         <Wallet className="h-5 w-5 text-cyan-500" />
                         <span className="text-sm font-medium text-muted-foreground">Total Balance:</span>
                         <span className="text-lg font-bold">₹12,450.00</span>
@@ -245,6 +245,7 @@ export default function DashboardPage() {
                                     dataKey="Expenditure"
                                     fill="var(--color-Expenditure)"
                                     radius={4}
+                                    maxBarSize={50}
                                     onClick={(data) => setSelectedMonth(data.month)}
                                     className="cursor-pointer hover:opacity-80 transition-opacity"
                                 />
